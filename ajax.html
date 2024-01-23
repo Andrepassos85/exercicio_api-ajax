@@ -41,19 +41,29 @@
             const followingElement = document.querySelector('#following');
             const linkElement = document.querySelector('#link');
 
-            fetch('https://api.github.com/users/Andrepassos85')
-            .then(function(res) {
-                return res.json();
-            })
-            .then(function(json) {
-                nameElement.innerText = json.name;
-                usernameElement.innerText = json.login;
-                avatarElement.src = json.avatar_url;
-                followingElement.innerText = json.following;
-                followersElement.innerText = json.followers;
-                repos.innerText = json.public_repos;
-                linkElement.href = json.html_url;
-            })
+            try {
+                fetch('https://api.github.com/users/Andrepassos85')
+                    .then(function(res) {
+                        if (!res.ok) {
+                            throw new Error('Não foi possível obter os dados do usuário.');
+                        }
+                        return res.json();
+                    })
+                    .then(function(json) {
+                        nameElement.innerText = json.name;
+                        usernameElement.innerText = json.login;
+                        avatarElement.src = json.avatar_url;
+                        followingElement.innerText = json.following;
+                        followersElement.innerText = json.followers;
+                        repos.innerText = json.public_repos;
+                        linkElement.href = json.html_url;
+                    })
+                    .catch(function(error) {
+                        console.error('Erro na solicitação da API:', error.message);
+                    });
+            } catch (error) {
+                console.error('Erro ao processar a solicitação:', error.message);
+            }
         })
     </script>
 </body>
